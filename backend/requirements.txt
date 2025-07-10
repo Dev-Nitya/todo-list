@@ -120,7 +120,7 @@ protobuf==4.25.1
 psutil==5.9.6
 psycopg2-binary==2.9.9
 ptyprocess==0.7.0
-pulsar-client==3.3.0
+pulsar-client>=3.6.1
 pure-eval==0.2.2
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
