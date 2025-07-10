@@ -1,16 +1,9 @@
-from functools import lru_cache
-from typing import Union
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-import config
-from routers import todos
-
-app = FastAPI()
-
-app.include_router(todos.router)
+app = FastAPI(title="Todo API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,15 +18,38 @@ async def http_exception_handler(request, exc):
     print(f"{repr(exc)}")
     return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
-@lru_cache()
-def get_settings():
-    return config.Settings()
-
 @app.get("/")
-def read_root(settings: config.Settings = Depends(get_settings)):
-    print(settings.app_name)
-    return "Hello World"
+def read_root():
+    return {"message": "Hello World", "status": "FastAPI is running!"}
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
+# Temporary in-memory todos for testing
+todos = [
+    {"id": 1, "name": "Learn FastAPI", "completed": False},
+    {"id": 2, "name": "Deploy to Vercel", "completed": True}
+]
+
+@app.get("/todos")
+def get_todos():
+    return todos
+
+@app.get("/todos/{todo_id}")
+def get_todo(todo_id: int):
+    for todo in todos:
+        if todo["id"] == todo_id:
+            return todo
+    return {"error": "Todo not found"}
+
+@app.post("/todos")
+def create_todo(todo_data: dict):
+    new_id = max([t["id"] for t in todos]) + 1 if todos else 1
+    new_todo = {
+        "id": new_id,
+        "name": todo_data.get("name", ""),
+        "completed": todo_data.get("completed", False)
+    }
+    todos.append(new_todo)
+    return new_todo
