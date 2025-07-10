@@ -123,8 +123,9 @@ pure-eval==0.2.2
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
 pycparser==2.21
-pydantic>=1.10.0,<2.0.0
-pydantic-settings>=1.2.0,<2.0.0
+pydantic==2.5.2
+pydantic-settings==2.1.0
+pydantic_core==2.14.5
 Pygments==2.17.2
 pypdf==3.17.1
 PyPika==0.48.9
