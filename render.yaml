@@ -4,11 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: python -c "import main; print('Module imported successfully')" && uvicorn main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
-      - key: PYTHONDONTWRITEBYTECODE
-        value: 1
-      - key: PYTHONUNBUFFERED
-        value: 1
