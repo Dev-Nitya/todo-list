@@ -53,3 +53,10 @@ def create_todo(todo_data: dict):
     }
     todos.append(new_todo)
     return new_todo
+
+# Explicit ASGI application export for deployment platforms
+application = app
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
